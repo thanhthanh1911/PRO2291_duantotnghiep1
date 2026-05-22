@@ -1,0 +1,1 @@
+print("hoang co thich con trai khong?")
