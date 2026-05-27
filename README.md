@@ -45,8 +45,65 @@ Dự án xây dựng hệ thống phân tích doanh thu bán hàng và hành vi 
 | Thành phần | Sales, Customer, Product, Geography      |
 | Mục tiêu   | Phân tích doanh thu & hành vi khách hàng |
 
+
+---
+## Kiến trúc hệ thống
+
+Dự án được xây dựng theo quy trình Data Pipeline gồm 6 lớp, từ dữ liệu thô ban đầu đến Dashboard phân tích cuối cùng.
+
+```text
+DATA PIPELINE (6 LAYERS)
+
+┌──────────────┬──────────────┬──────────────────────┬──────────────────────┬──────────────────────┬──────────────────────┐
+│ Layer 1      │ Layer 2      │ Layer 3              │ Layer 4              │ Layer 5              │ Layer 6              │
+│ Source       │ Explore      │ Transform & Clean    │ Model                │ Aggregate            │ Visualize            │
+├──────────────┼──────────────┼──────────────────────┼──────────────────────┼──────────────────────┼──────────────────────┤
+│ Raw CSV      │ EDA          │ Cleaning             │ Star Schema          │ Data Marts           │ Dashboard            │
+│ sales_06     │ Pandas       │ Feature Engineering  │ Fact & Dimension     │ Aggregated Tables    │ Tableau  / Python    │
+│ FY2020-21    │ NumPy        │ KPI Calculation      │ SQL Server Ready     │ CSV Outputs          │ Visualization        │
+└──────────────┴──────────────┴──────────────────────┴──────────────────────┴──────────────────────┴──────────────────────┘
+```
+---
+                         ┌──────────────────┐
+                         │    dim_time      │
+                         │──────────────────│
+                         │ date_id          │
+                         │ order_date       │
+                         │ day              │
+                         │ month            │
+                         │ quarter          │
+                         │ year             │
+                         └────────┬─────────┘
+                                  │
+                                  │
+┌──────────────────┐      ┌───────▼────────┐      ┌──────────────────┐
+│  dim_customer    │      │   fact_sales   │      │   dim_product    │
+│──────────────────│      │────────────────│      │──────────────────│
+│ customer_id      │──────│ customer_id    │──────│ product_id       │
+│ gender           │      │ product_id     │      │ sku              │
+│ age              │      │ date_id        │      │ category         │
+│ customer_since   │      │ location_id    │      │ price            │
+└──────────────────┘      │ order_id       │      └──────────────────┘
+                          │ qty_ordered    │
+                          │ price          │
+                          │ discount       │
+                          │ revenue        │
+                          │ status         │
+                          └───────┬────────┘
+                                  │
+                                  │
+                         ┌────────▼─────────┐
+                         │  dim_location    │
+                         │──────────────────│
+                         │ location_id      │
+                         │ city             │
+                         │ state            │
+                         │ region           │
+                         │ zip              │
+                         └──────────────────┘
 ---
 ##  Cấu trúc thư mục
+
 ```
 PRO2291_duantotnghiep1/
 │
