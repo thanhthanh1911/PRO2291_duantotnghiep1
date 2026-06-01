@@ -7,20 +7,25 @@ CLEANED_PATH = Path("data/cleaned/sales_cleaned.csv")
 def clean_data():
     df = pd.read_csv(RAW_PATH, low_memory=False)
 
-    print("Columns:")
-    print(df.columns.tolist())
-
     df.columns = (
         df.columns
         .str.strip()
         .str.lower()
-        .str.replace(" ", "_", regex=False)
+        .str.replace(" ", "_")
+        .str.replace(".", "_")
     )
 
     df = df.drop_duplicates()
 
-    CLEANED_PATH.parent.mkdir(parents=True, exist_ok=True)
+    df["order_date"] = pd.to_datetime(df["order_date"], errors="coerce")
 
+    df = df.dropna(subset=["order_id", "order_date", "total"])
+
+    df["order_id"] = df["order_id"].astype(str)
+    df["cust_id"] = df["cust_id"].astype(str)
+    df["sku"] = df["sku"].astype(str)
+
+    CLEANED_PATH.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(CLEANED_PATH, index=False)
 
     print("Cleaning completed:", df.shape)
