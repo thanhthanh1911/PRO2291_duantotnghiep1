@@ -1,33 +1,69 @@
 import pandas as pd
 
+
 def convert_datatypes(df):
-    # Chuyển ngày tháng
-    if "order_date" in df.columns:
-        df["order_date"] = pd.to_datetime(
-            df["order_date"],
-            dayfirst=True,
-            errors="coerce"
-        )
+    """
+    Chuyển đổi kiểu dữ liệu cho DataFrame.
+    """
 
-    if "customer_since" in df.columns:
-        df["customer_since"] = pd.to_datetime(
-            df["customer_since"],
-            dayfirst=True,
-            errors="coerce"
-        )
+    df = df.copy()
 
-    # Chuyển các cột số
+    print("\n" + "=" * 50)
+    print("DATA TYPE CONVERSION")
+    print("=" * 50)
+
+
+    date_cols = [
+        "order_date",
+        "customer_since"
+    ]
+
+    for col in date_cols:
+
+        if col in df.columns:
+
+            df[col] = pd.to_datetime(
+                df[col],
+                dayfirst=True,
+                errors="coerce"
+            )
+
+            print(f"[✔] Converted {col} → datetime")
+
+    # ------------------
+    # Chuyển cột số
+    # ------------------
+
     numeric_cols = [
+
         "age",
+
+        "qty_ordered",
         "price",
-        "quantity",
-        "discount",
-        "profit",
-        "total"
+        "value",
+        "discount_amount",
+        "discount_percent",
+        "total",
+
+        "cust_id",
+        "item_id",
+        "year",
+        "ref_num",
+        "zip"
+
     ]
 
     for col in numeric_cols:
+
         if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+            df[col] = pd.to_numeric(
+                df[col],
+                errors="coerce"
+            )
+
+            print(f"[✔] Converted {col} → numeric")
+
+    print("[✔] Data type conversion completed.")
 
     return df

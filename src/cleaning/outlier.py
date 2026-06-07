@@ -2,9 +2,8 @@ import pandas as pd
 
 
 class OutlierDetector:
-    def __init__(self, file_path):
-        self.file_path = file_path
-        self.df = None
+    def __init__(self, df):
+        self.df = df.copy()
 
         # Các cột không cần kiểm tra outlier
         self.ignore_cols = [
@@ -14,30 +13,11 @@ class OutlierDetector:
             "year"
         ]
 
-    def load_data(self):
-        """Đọc dữ liệu từ file CSV"""
-        try:
-            self.df = pd.read_csv(self.file_path)
-
-            print("Đọc dữ liệu thành công!")
-            print(f"Số dòng: {self.df.shape[0]}")
-            print(f"Số cột: {self.df.shape[1]}")
-
-        except FileNotFoundError:
-            raise FileNotFoundError(
-                f"Không tìm thấy file: {self.file_path}"
-            )
-
-        except Exception as e:
-            raise Exception(
-                f"Lỗi khi đọc dữ liệu: {e}"
-            )
-
     def check_data_loaded(self):
         """Kiểm tra dữ liệu đã được load chưa"""
         if self.df is None:
             raise ValueError(
-                "Vui lòng gọi load_data() trước!"
+                "Dữ liệu chưa được truyền vào!"
             )
 
     def get_numeric_columns(self):
@@ -47,7 +27,7 @@ class OutlierDetector:
         return [
             col
             for col in self.df.select_dtypes(
-                include=["int64", "float64"]
+                include=["int64", "float64", "int32", "float32"]
             ).columns
             if col not in self.ignore_cols
         ]
@@ -128,6 +108,27 @@ class OutlierDetector:
 
         return self.df[mask]
 
+    def flag_outliers(self):
+        """Đánh dấu các dòng chứa outlier"""
+
+        self.check_data_loaded()
+
+        df_flagged = self.df.copy()
+
+        df_flagged["is_outlier"] = False
+
+        for col in self.get_numeric_columns():
+
+            lower_bound, upper_bound = self.calculate_iqr(col)
+
+            df_flagged["is_outlier"] = (
+                df_flagged["is_outlier"]
+                | (df_flagged[col] < lower_bound)
+                | (df_flagged[col] > upper_bound)
+            )
+
+        return df_flagged
+
     def remove_outliers(self):
         """Loại bỏ outlier ở các cột quan trọng"""
 
@@ -177,15 +178,13 @@ class OutlierDetector:
             print(f"- {col}")
 
 
-def main():
+def detect_outliers(df):
+    """
+    Hàm dùng cho cleaner.py:
+    Trả về các dòng chứa outlier.
+    """
 
-    detector = OutlierDetector(
-        "data/raw/sales_06_FY2020-21.csv"
-    )
-
-    detector.load_data()
-
-    detector.summary()
+    detector = OutlierDetector(df)
 
     report = detector.detect_outliers()
 
@@ -207,11 +206,6 @@ def main():
             f"{info['outlier_count']}"
         )
 
-    detector.show_outliers(
-        "qty_ordered",
-        n=10
-    )
-
     outlier_df = detector.get_outlier_rows()
 
     print("\n===== THỐNG KÊ OUTLIER =====")
@@ -220,25 +214,19 @@ def main():
         f"{len(outlier_df)}"
     )
 
-    clean_df = detector.remove_outliers()
-
-    print("\n===== KẾT QUẢ SAU KHI LOẠI OUTLIER =====")
-    print(
-        f"Số dòng ban đầu: "
-        f"{len(detector.df)}"
-    )
-
-    print(
-        f"Số dòng còn lại: "
-        f"{len(clean_df)}"
-    )
-
-    print(
-        f"Số dòng bị loại: "
-        f"{len(detector.df) - len(clean_df)}"
-    )
+    return outlier_df
 
 
-if __name__ == "__main__":
-    main()
-    #
+def flag_outliers(df):
+    """
+    Hàm dùng cho cleaner.py:
+    Tạo cột is_outlier để đánh dấu dòng bất thường.
+    """
+
+    detector = OutlierDetector(df)
+
+    df_flagged = detector.flag_outliers()
+
+    print("[✔] Đã tạo cột is_outlier.")
+
+    return df_flagged
