@@ -27,6 +27,14 @@ def clean_data():
 
     df = convert_datatypes(df)
 
+    print("\n===== NULL SAU KHI CONVERT =====")
+    print(
+        df.isnull()
+        .sum()
+        .sort_values(ascending=False)
+        .head(20)
+    )
+
     df = handle_nulls(df)
 
     duplicate_count = df.duplicated().sum()

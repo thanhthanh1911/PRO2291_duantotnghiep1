@@ -227,6 +227,6 @@ def flag_outliers(df):
 
     df_flagged = detector.flag_outliers()
 
-    print("[✔] Đã tạo cột is_outlier.")
+    print("Đã tạo cột is_outlier.")
 
     return df_flagged
