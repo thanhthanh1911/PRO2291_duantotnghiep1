@@ -180,7 +180,8 @@ PRO2291_duantotnghiep1/
 │   │   └── sales_06_FY2020-21.csv
 │   │
 │   ├── cleaned/
-│   │   └── sales_cleaned.csv
+│   │   ├── sales_cleaned.csv
+│   │   └── outliers.csv
 │   │
 │   ├── dim_fact/
 │   │   ├── dim_customer.csv
@@ -197,8 +198,16 @@ PRO2291_duantotnghiep1/
 ├── src/
 │   ├── cleaner.py
 │   ├── eda.py
+│   ├── check_integrity.py
+│   ├── main.py
 │   ├── transform.py
-│   └── forecast.py
+│   ├── forecast.py
+│   └── cleaning/
+│       ├── __init__.py
+│       ├── null.py
+│       ├── outlier.py
+│       ├── standardizer.py
+│       └── datatype.py
 │
 ├── notebooks/
 │   └── eda.ipynb
