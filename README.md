@@ -191,9 +191,10 @@ PRO2291_duantotnghiep1/
 │   │   └── fact_sales.csv
 │   │
 │   └── aggregates/
-│       ├── agg_monthly_sales.csv
-│       ├── agg_region_sales.csv
-│       └── agg_discount_analysis.csv
+│       ├── revenue_by_month.csv
+│       ├── revenue_by_region.csv
+│       ├── revenue_by_category.csv
+│       └── top_customers.csv
 │
 ├── src/
 │   ├── cleaner.py
