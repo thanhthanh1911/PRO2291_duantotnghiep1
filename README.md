@@ -25,7 +25,6 @@ Dự án xây dựng hệ thống phân tích doanh thu bán hàng và hành vi 
 * đánh giá hiệu quả giảm giá,
 * và dự báo xu hướng doanh thu.
 
-<<<<<<< HEAD
 ---
 ### 1. Ý nghĩa của dòng dữ liệu
 
@@ -90,9 +89,6 @@ Bảng của phần 3 mô tả các trường dữ liệu được sử dụng t
 
 - Thông qua việc khai thác và phân tích tập dữ liệu này, nhóm có thể xây dựng các báo cáo trực quan nhằm đánh giá tình hình kinh doanh, nhận diện xu hướng bán hàng và đề xuất các giải pháp nâng cao doanh thu cho doanh nghiệp.
 ---
-
-=======
->>>>>>> 70a820003d7e8a54f83e29601cdabab6379d1321
 ## Phát hiện chính (Key Findings)
 
 Dựa trên 286.392 giao dịch bán hàng trong giai đoạn 2020–2021, hệ thống phân tích đã phát hiện nhiều xu hướng quan trọng hỗ trợ doanh nghiệp trong việc ra quyết định kinh doanh.
@@ -168,12 +164,7 @@ Từ các kết quả phân tích ban đầu, doanh nghiệp có thể:
 * Nghiên cứu cải thiện doanh số tại Northeast.
 * Tối ưu chính sách giảm giá nhằm cân bằng giữa doanh thu và lợi nhuận.
 * Xây dựng mô hình dự báo doanh thu phục vụ lập kế hoạch kinh doanh trong tương lai.
-<<<<<<< HEAD
 ---
-=======
-
-
->>>>>>> 70a820003d7e8a54f83e29601cdabab6379d1321
 ## Các vấn đề doanh nghiệp có thể giải quyết
 | # | Vấn đề                                 | Giải pháp phân tích                |
 | - | -------------------------------------- | ---------------------------------- |
